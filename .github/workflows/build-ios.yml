@@ -55,14 +55,28 @@ jobs:
 
       - name: Build unsigned iOS simulator app
         run: |
+          set -o pipefail
+          mkdir -p build
           xcodebuild \
             -workspace ios/Aujunpeak.xcworkspace \
             -scheme Aujunpeak \
             -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
             -configuration Debug \
             -derivedDataPath build/ios \
+            -resultBundlePath build/Aujunpeak.xcresult \
             CODE_SIGNING_ALLOWED=NO \
-            build
+            build 2>&1 | tee build/xcodebuild.log
+
+      - name: Upload Xcode diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Aujunpeak-xcode-diagnostics
+          path: |
+            build/xcodebuild.log
+            build/Aujunpeak.xcresult
+          if-no-files-found: ignore
 
       - name: Upload simulator app
         uses: actions/upload-artifact@v4
