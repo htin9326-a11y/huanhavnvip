@@ -1,0 +1,29 @@
+{
+  "expo": {
+    "name": "Aujunpeak",
+    "slug": "aujunpeak",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "aujunpeak",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/images/brand-logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#F7FAFF"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.aujunpeak.iospreview"
+    },
+    "android": {},
+    "web": {
+      "favicon": "./assets/images/icon.png"
+    },
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}
