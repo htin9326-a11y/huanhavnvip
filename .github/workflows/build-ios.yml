@@ -1,0 +1,64 @@
+name: Build Aujunpeak iOS simulator app
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'app/**'
+      - 'assets/**'
+      - 'components/**'
+      - 'constants/**'
+      - 'hooks/**'
+      - 'lib/**'
+      - 'app.json'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/build-ios.yml'
+
+jobs:
+  build-ios-simulator:
+    name: Unsigned iOS simulator build
+    runs-on: macos-15
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck app
+        run: pnpm run typecheck
+
+      - name: Generate the iOS simulator project
+        run: pnpm exec expo prebuild --platform ios --no-install
+
+      - name: Build unsigned iOS simulator app
+        run: |
+          xcodebuild \
+            -workspace ios/Aujunpeak.xcworkspace \
+            -scheme Aujunpeak \
+            -sdk iphonesimulator \
+            -configuration Debug \
+            -derivedDataPath build/ios \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Upload simulator app
+        uses: actions/upload-artifact@v4
+        with:
+          name: Aujunpeak-iOS-simulator
+          path: build/ios/Build/Products/Debug-iphonesimulator/Aujunpeak.app
+          if-no-files-found: error
