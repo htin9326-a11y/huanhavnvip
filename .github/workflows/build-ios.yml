@@ -6,16 +6,16 @@ on:
     branches:
       - main
     paths:
-      - 'app/**'
-      - 'assets/**'
-      - 'components/**'
-      - 'constants/**'
-      - 'hooks/**'
-      - 'lib/**'
-      - 'app.json'
-      - 'package.json'
-      - 'pnpm-lock.yaml'
-      - '.github/workflows/build-ios.yml'
+      - "app/**"
+      - "assets/**"
+      - "components/**"
+      - "constants/**"
+      - "hooks/**"
+      - "lib/**"
+      - "app.json"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/build-ios.yml"
 
 jobs:
   build-ios-simulator:
@@ -43,7 +43,15 @@ jobs:
         run: pnpm run typecheck
 
       - name: Generate the iOS simulator project
-        run: pnpm exec expo prebuild --platform ios --no-install
+        run: >-
+          pnpm exec expo prebuild --platform ios --clean --no-install
+
+      - name: Install CocoaPods dependencies
+        working-directory: ios
+        run: pod install
+
+      - name: Verify generated Xcode workspace
+        run: test -d ios/Aujunpeak.xcworkspace
 
       - name: Build unsigned iOS simulator app
         run: |
