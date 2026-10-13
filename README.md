@@ -16,6 +16,7 @@ Press `w` in Expo's terminal to open the web preview, or scan the QR code with E
 ## GitHub iOS build
 
 The included workflow builds and uploads an **unsigned iOS Simulator `.app`** on a GitHub-hosted macOS runner. It does not produce a signed `.ipa` for installing on a physical iPhone.
+It also uploads the Xcode log and result bundle so native build failures can be diagnosed from the workflow artifacts.
 
 ## Compatibility screen
 
